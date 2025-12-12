@@ -47,6 +47,14 @@
         </div>
     </header>
 
+    <!-- إعلان أعلى الصفحة -->
+    <div class="ad-container top-ad">
+        <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+            <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                   style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+        </div>
+    </div>
+
     <!-- شريط البحث -->
     <div class="search-container">
         <div class="container">
@@ -85,6 +93,19 @@
                     <h3 id="totalDownloads">0</h3>
                     <p>تحميل إجمالي</p>
                 </div>
+                <div class="stat-card">
+                    <i class="fas fa-fire"></i>
+                    <h3 id="todayViews">0</h3>
+                    <p>زيارات اليوم</p>
+                </div>
+            </div>
+            
+            <!-- إعلان وسط الصفحة -->
+            <div class="ad-container middle-ad">
+                <div id="frame-middle">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
             </div>
             
             <div class="latest-content">
@@ -102,10 +123,27 @@
                 <h2>جميع المودات</h2>
                 <p>اكتشف أفضل المودات لتحسين تجربة ماينكرافت</p>
             </div>
+            
+            <!-- إعلان في صفحة المودات -->
+            <div class="ad-container section-ad">
+                <div id="frame-mods">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
+            </div>
+            
             <div class="items-grid" id="allMods"></div>
             <div class="no-results" id="noModsMessage" style="display: none;">
                 <i class="fas fa-puzzle-piece"></i>
                 <p>لا توجد مودات متاحة حالياً</p>
+            </div>
+            
+            <!-- إعلان أسفل المودات -->
+            <div class="ad-container bottom-ad">
+                <div id="frame-mods-bottom">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
             </div>
         </section>
 
@@ -115,10 +153,27 @@
                 <h2>إصدارات ماينكرافت</h2>
                 <p>جميع إصدارات ماينكرافت البيدروك للتحميل</p>
             </div>
+            
+            <!-- إعلان في صفحة الإصدارات -->
+            <div class="ad-container section-ad">
+                <div id="frame-versions">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
+            </div>
+            
             <div class="items-grid" id="allVersions"></div>
             <div class="no-results" id="noVersionsMessage" style="display: none;">
                 <i class="fas fa-download"></i>
                 <p>لا توجد إصدارات متاحة حالياً</p>
+            </div>
+            
+            <!-- إعلان أسفل الإصدارات -->
+            <div class="ad-container bottom-ad">
+                <div id="frame-versions-bottom">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
             </div>
         </section>
 
@@ -156,6 +211,9 @@
                     <button id="logoutBtn" class="btn btn-danger">
                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                     </button>
+                    <button id="refreshDataBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> تحديث البيانات
+                    </button>
                 </div>
             </div>
             
@@ -165,6 +223,9 @@
                 </button>
                 <button class="btn btn-secondary" data-action="add-version">
                     <i class="fas fa-plus"></i> إضافة إصدار جديد
+                </button>
+                <button class="btn btn-warning" data-action="view-stats">
+                    <i class="fas fa-chart-bar"></i> إحصائيات الموقع
                 </button>
             </div>
             
@@ -188,6 +249,7 @@
                                 <option value="سحر">سحر</option>
                                 <option value="بناء">بناء</option>
                                 <option value="واجهة">واجهة</option>
+                                <option value="مركبات">مركبات</option>
                                 <option value="آخر">آخر</option>
                             </select>
                         </div>
@@ -202,17 +264,20 @@
                         <div class="form-group">
                             <label for="imageUrl">رابط الصورة *</label>
                             <input type="url" id="imageUrl" class="form-control" placeholder="https://example.com/image.jpg" required>
+                            <small class="form-text">استخدم خدمة مثل imgur.com لرفع الصور</small>
                         </div>
                         <div class="form-group">
                             <label for="videoUrl">رابط فيديو اليوتيوب</label>
                             <input type="url" id="videoUrl" class="form-control" placeholder="https://youtube.com/watch?v=...">
+                            <small class="form-text">رابط فيديو لشرح المود</small>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="downloadUrl">رابط التحميل *</label>
-                            <input type="url" id="downloadUrl" class="form-control" required>
+                            <input type="url" id="downloadUrl" class="form-control" placeholder="https://example.com/download/mod.zip" required>
+                            <small class="form-text">رابط مباشر للتحميل</small>
                         </div>
                         <div class="form-group">
                             <label for="version">إصدار ماينكرافت</label>
@@ -227,13 +292,42 @@
                         <button type="button" class="btn btn-secondary" id="cancelBtn">
                             <i class="fas fa-times"></i> إلغاء
                         </button>
+                        <button type="button" class="btn btn-warning" id="previewBtn">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
                     </div>
                 </form>
             </div>
             
+            <!-- إحصائيات الموقع -->
+            <div class="admin-section" id="stats-section" style="display: none;">
+                <h3><i class="fas fa-chart-bar"></i> إحصائيات الموقع</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4>إجمالي الزيارات</h4>
+                        <p class="stat-number" id="totalVisits">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>زيارات اليوم</h4>
+                        <p class="stat-number" id="todayVisits">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>أكثر مود تحميلاً</h4>
+                        <p class="stat-text" id="topMod">لا توجد بيانات</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>أكثر إصدار تحميلاً</h4>
+                        <p class="stat-text" id="topVersion">لا توجد بيانات</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- قائمة المودات للإدارة -->
             <div class="admin-section">
-                <h3><i class="fas fa-puzzle-piece"></i> إدارة المودات</h3>
+                <h3><i class="fas fa-puzzle-piece"></i> إدارة المودات <span class="badge" id="modsCountAdmin">0</span></h3>
+                <div class="admin-search">
+                    <input type="text" id="adminSearchMods" class="form-control" placeholder="بحث في المودات...">
+                </div>
                 <div class="posts-list" id="adminModsList">
                     <div class="loading-item">
                         <i class="fas fa-spinner fa-spin"></i> جاري تحميل المودات...
@@ -243,7 +337,10 @@
             
             <!-- قائمة الإصدارات للإدارة -->
             <div class="admin-section">
-                <h3><i class="fas fa-download"></i> إدارة الإصدارات</h3>
+                <h3><i class="fas fa-download"></i> إدارة الإصدارات <span class="badge" id="versionsCountAdmin">0</span></h3>
+                <div class="admin-search">
+                    <input type="text" id="adminSearchVersions" class="form-control" placeholder="بحث في الإصدارات...">
+                </div>
                 <div class="posts-list" id="adminVersionsList">
                     <div class="loading-item">
                         <i class="fas fa-spinner fa-spin"></i> جاري تحميل الإصدارات...
@@ -256,6 +353,14 @@
     <!-- الفوتر -->
     <footer>
         <div class="container">
+            <!-- إعلان في الفوتر -->
+            <div class="ad-container footer-ad">
+                <div id="frame-footer">
+                    <iframe data-aa='2420489' src='//acceptable.a-ads.com/2420489/?size=Adaptive'
+                           style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                </div>
+            </div>
+            
             <div class="footer-content">
                 <div class="logo-container">
                     <div class="logo small">
@@ -264,9 +369,17 @@
                     <h3 class="logo-text">مكتبة المودات والبيدروك</h3>
                 </div>
                 <p class="tagline">أكبر مكتبة عربية لمودات وإصدارات ماينكرافت البيدروك</p>
+                
+                <div class="footer-links">
+                    <a href="#" data-section="home">الرئيسية</a>
+                    <a href="#" data-section="mods">المودات</a>
+                    <a href="#" data-section="versions">الإصدارات</a>
+                    <a href="#" data-section="admin-login">لوحة الإدارة</a>
+                </div>
+                
                 <div class="copyright">
                     <p>© 2023 مكتبة المودات. جميع الحقوق محفوظة.</p>
-                    <p class="version">الإصدار 2.0 | متصل بـ Supabase</p>
+                    <p class="version">الإصدار 3.0 | متصل بـ Supabase | مدعوم بإعلانات A-Ads</p>
                 </div>
             </div>
         </div>
@@ -279,5 +392,13 @@
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
+
+    <!-- نموذج المعاينة -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closePreview">&times;</button>
+            <div class="modal-body" id="previewBody"></div>
+        </div>
+    </div>
 </body>
-</html>
+                </html>
