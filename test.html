@@ -29,7 +29,6 @@
         
         async function testConnection() {
             try {
-                // اختبار الاتصال بمحاولة جلب البيانات من جدول المودات
                 const { data, error } = await supabase
                     .from('mods')
                     .select('count');
@@ -147,8 +146,7 @@
             }
         }
         
-        // اختبار الاتصال عند التحميل
         window.addEventListener('load', testConnection);
     </script>
 </body>
-  </html>
+</html>
