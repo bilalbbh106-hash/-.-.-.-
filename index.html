@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة المودات وإصدارات ماينكرافت البيدروك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="cube">
+                <div class="face front"></div>
+                <div class="face back"></div>
+                <div class="face right"></div>
+                <div class="face left"></div>
+                <div class="face top"></div>
+                <div class="face bottom"></div>
+            </div>
+            <p>جاري التحميل...</p>
+        </div>
+    </div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <h1 class="logo-text">مكتبة المودات والبيدروك</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="#" class="nav-link" data-section="mods"><i class="fas fa-puzzle-piece"></i> المودات</a></li>
+                    <li><a href="#" class="nav-link" data-section="versions"><i class="fas fa-download"></i> الإصدارات</a></li>
+                    <li><a href="#" class="nav-link admin-btn" data-section="admin-login"><i class="fas fa-user-shield"></i> لوحة الإدارة</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- شريط البحث -->
+    <div class="search-container">
+        <div class="container">
+            <div class="search-box-wrapper">
+                <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن مود أو إصدار...">
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <!-- الصفحة الرئيسية -->
+        <section id="home" class="content-section active">
+            <div class="page-title">
+                <h2>أحدث المودات والإصدارات</h2>
+                <p>مكتبة شاملة لمودات وإصدارات ماينكرافت البيدروك</p>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h3 id="modsCount">0</h3>
+                    <p>مود متاح</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-download"></i>
+                    <h3 id="versionsCount">0</h3>
+                    <p>إصدار متاح</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3 id="totalDownloads">0</h3>
+                    <p>تحميل إجمالي</p>
+                </div>
+            </div>
+            
+            <div class="latest-content">
+                <h3 class="section-subtitle"><i class="fas fa-fire"></i> أحدث المودات</h3>
+                <div class="items-grid" id="latestMods"></div>
+                
+                <h3 class="section-subtitle"><i class="fas fa-star"></i> أحدث الإصدارات</h3>
+                <div class="items-grid" id="latestVersions"></div>
+            </div>
+        </section>
+
+        <!-- صفحة المودات -->
+        <section id="mods" class="content-section">
+            <div class="page-title">
+                <h2>جميع المودات</h2>
+                <p>اكتشف أفضل المودات لتحسين تجربة ماينكرافت</p>
+            </div>
+            <div class="items-grid" id="allMods"></div>
+            <div class="no-results" id="noModsMessage" style="display: none;">
+                <i class="fas fa-puzzle-piece"></i>
+                <p>لا توجد مودات متاحة حالياً</p>
+            </div>
+        </section>
+
+        <!-- صفحة الإصدارات -->
+        <section id="versions" class="content-section">
+            <div class="page-title">
+                <h2>إصدارات ماينكرافت</h2>
+                <p>جميع إصدارات ماينكرافت البيدروك للتحميل</p>
+            </div>
+            <div class="items-grid" id="allVersions"></div>
+            <div class="no-results" id="noVersionsMessage" style="display: none;">
+                <i class="fas fa-download"></i>
+                <p>لا توجد إصدارات متاحة حالياً</p>
+            </div>
+        </section>
+
+        <!-- صفحة تسجيل دخول الأدمن -->
+        <section id="admin-login" class="content-section">
+            <div class="page-title">
+                <h2>تسجيل دخول الإدارة</h2>
+                <p>الوصول محمي بكلمة مرور</p>
+            </div>
+            
+            <div class="admin-login">
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="adminPassword"><i class="fas fa-key"></i> كلمة مرور الإدارة</label>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور">
+                        <div class="password-toggle">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="loginBtn" class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                        </button>
+                    </div>
+                    <div class="login-message" id="loginMessage"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- لوحة الإدارة -->
+        <section id="admin-panel" class="content-section">
+            <div class="page-title">
+                <h2><i class="fas fa-user-shield"></i> لوحة التحكم</h2>
+                <div class="admin-header">
+                    <button id="logoutBtn" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                    </button>
+                </div>
+            </div>
+            
+            <div class="admin-actions">
+                <button class="btn btn-primary" data-action="add-mod">
+                    <i class="fas fa-plus"></i> إضافة مود جديد
+                </button>
+                <button class="btn btn-secondary" data-action="add-version">
+                    <i class="fas fa-plus"></i> إضافة إصدار جديد
+                </button>
+            </div>
+            
+            <!-- نموذج إضافة/تعديل مود -->
+            <div class="admin-section" id="mod-form-section" style="display: none;">
+                <h3><i class="fas fa-puzzle-piece"></i> <span id="form-title">إضافة مود جديد</span></h3>
+                <form id="modForm">
+                    <input type="hidden" id="editId">
+                    <input type="hidden" id="itemType" value="mod">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">عنوان المود *</label>
+                            <input type="text" id="title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">الفئة</label>
+                            <select id="category" class="form-control">
+                                <option value="أدوات">أدوات</option>
+                                <option value="أسلحة">أسلحة</option>
+                                <option value="سحر">سحر</option>
+                                <option value="بناء">بناء</option>
+                                <option value="واجهة">واجهة</option>
+                                <option value="آخر">آخر</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">وصف المود *</label>
+                        <textarea id="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="imageUrl">رابط الصورة *</label>
+                            <input type="url" id="imageUrl" class="form-control" placeholder="https://example.com/image.jpg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="videoUrl">رابط فيديو اليوتيوب</label>
+                            <input type="url" id="videoUrl" class="form-control" placeholder="https://youtube.com/watch?v=...">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="downloadUrl">رابط التحميل *</label>
+                            <input type="url" id="downloadUrl" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="version">إصدار ماينكرافت</label>
+                            <input type="text" id="version" class="form-control" placeholder="1.20.1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> حفظ
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">
+                            <i class="fas fa-times"></i> إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- قائمة المودات للإدارة -->
+            <div class="admin-section">
+                <h3><i class="fas fa-puzzle-piece"></i> إدارة المودات</h3>
+                <div class="posts-list" id="adminModsList">
+                    <div class="loading-item">
+                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل المودات...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- قائمة الإصدارات للإدارة -->
+            <div class="admin-section">
+                <h3><i class="fas fa-download"></i> إدارة الإصدارات</h3>
+                <div class="posts-list" id="adminVersionsList">
+                    <div class="loading-item">
+                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل الإصدارات...
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo-container">
+                    <div class="logo small">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3 class="logo-text">مكتبة المودات والبيدروك</h3>
+                </div>
+                <p class="tagline">أكبر مكتبة عربية لمودات وإصدارات ماينكرافت البيدروك</p>
+                <div class="copyright">
+                    <p>© 2023 مكتبة المودات. جميع الحقوق محفوظة.</p>
+                    <p class="version">الإصدار 2.0 | متصل بـ Supabase</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نموذج عرض التفاصيل -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+</body>
+</html>
