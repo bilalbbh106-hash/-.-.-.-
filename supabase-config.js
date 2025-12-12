@@ -14,27 +14,34 @@ const TABLES = {
     VERSIONS: 'versions'
 };
 
+// إحصائيات الموقع (تخزين محلي)
+let siteStats = {
+    totalVisits: parseInt(localStorage.getItem('totalVisits')) || 0,
+    todayVisits: 0,
+    todayDate: new Date().toDateString()
+};
+
 // دالة لتهيئة قاعدة البيانات واختبار الاتصال
 async function initializeDatabase() {
     try {
-        // اختبار الاتصال بمحاولة جلب البيانات من جدول المودات
+        // تحديث الإحصائيات
+        updateVisitStats();
+        
+        // اختبار الاتصال
         const { data, error } = await supabase
             .from(TABLES.MODS)
             .select('id')
             .limit(1);
         
         if (error) {
-            console.warn('تنبيه: ' + error.message);
+            console.warn('⚠️ ' + error.message);
             if (error.code === '42P01') {
-                console.warn('⚠️ الجداول غير موجودة. الرجاء إنشاؤها من SQL Editor في Supabase');
-                showMessage('⚠️ الجداول غير موجودة. الرجاء إنشاؤها من لوحة تحكم Supabase', 'error');
+                showMessage('⚠️ الجداول غير موجودة. الرجاء إنشاؤها من SQL Editor في Supabase', 'warning');
             } else {
-                console.error('خطأ في الاتصال:', error);
                 showMessage('خطأ في الاتصال بقاعدة البيانات', 'error');
             }
         } else {
             console.log('✅ تم الاتصال بـ Supabase بنجاح');
-            console.log('✅ الجداول موجودة وجاهزة للاستخدام');
             return true;
         }
     } catch (error) {
@@ -44,13 +51,57 @@ async function initializeDatabase() {
     return false;
 }
 
+// تحديث إحصائيات الزيارات
+function updateVisitStats() {
+    const today = new Date().toDateString();
+    
+    if (localStorage.getItem('lastVisitDate') !== today) {
+        // يوم جديد
+        localStorage.setItem('lastVisitDate', today);
+        siteStats.todayVisits = 1;
+    } else {
+        // نفس اليوم
+        siteStats.todayVisits = parseInt(localStorage.getItem('todayVisits')) || 0;
+        siteStats.todayVisits++;
+    }
+    
+    // زيادة الزيارات الإجمالية
+    siteStats.totalVisits++;
+    
+    // حفظ في localStorage
+    localStorage.setItem('totalVisits', siteStats.totalVisits.toString());
+    localStorage.setItem('todayVisits', siteStats.todayVisits.toString());
+    
+    // تحديث العرض إذا كانت الصفحة موجودة
+    updateStatsDisplay();
+}
+
+// تحديث عرض الإحصائيات
+function updateStatsDisplay() {
+    const todayViewsEl = document.getElementById('todayViews');
+    const totalVisitsEl = document.getElementById('totalVisits');
+    const todayVisitsEl = document.getElementById('todayVisits');
+    
+    if (todayViewsEl) {
+        todayViewsEl.textContent = siteStats.todayVisits.toLocaleString();
+    }
+    
+    if (totalVisitsEl) {
+        totalVisitsEl.textContent = siteStats.totalVisits.toLocaleString();
+    }
+    
+    if (todayVisitsEl) {
+        todayVisitsEl.textContent = siteStats.todayVisits.toLocaleString();
+    }
+}
+
 // دالة لعرض رسائل للمستخدم
 function showMessage(text, type) {
     // إنشاء عنصر الرسالة
     const messageDiv = document.createElement('div');
     messageDiv.className = `global-message global-message-${type}`;
     messageDiv.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'}"></i>
         <span>${text}</span>
         <button class="message-close">&times;</button>
     `;
@@ -166,7 +217,9 @@ window.supabaseConfig = {
     ADMIN_PASSWORD,
     TABLES,
     initializeDatabase,
-    showMessage
+    showMessage,
+    siteStats,
+    updateStatsDisplay
 };
 
 // تهيئة فورية عند تحميل الملف
