@@ -173,6 +173,18 @@ function loadDemoData() {
             version: '1.20.1',
             downloads: 1500,
             created_at: new Date().toISOString()
+        },
+        {
+            id: 2,
+            title: 'مود السيارات المتطورة',
+            description: 'أضف سيارات ومركبات مختلفة إلى عالم ماينكرافت مع فيزياء واقعية',
+            image_url: 'https://via.placeholder.com/400x200/50a351/ffffff?text=Car+Mod',
+            video_url: null,
+            download_url: 'https://example.com/download/cars.zip',
+            category: 'مركبات',
+            version: '1.19.4',
+            downloads: 2300,
+            created_at: new Date().toISOString()
         }
     ];
     
@@ -186,6 +198,17 @@ function loadDemoData() {
             download_url: 'https://example.com/download/minecraft-1.20.1.apk',
             version: '1.20.1',
             downloads: 15000,
+            created_at: new Date().toISOString()
+        },
+        {
+            id: 2,
+            title: 'ماينكرافت البيدروك 1.19.4',
+            description: 'إصدار سابق مستقر مع دعم للمودات القديمة',
+            image_url: 'https://via.placeholder.com/400x200/2d5ba9/ffffff?text=Minecraft+1.19.4',
+            video_url: null,
+            download_url: 'https://example.com/download/minecraft-1.19.4.apk',
+            version: '1.19.4',
+            downloads: 8500,
             created_at: new Date().toISOString()
         }
     ];
@@ -609,42 +632,76 @@ function renderAdminLists() {
     renderAdminItems(window.appData.allItems.versions, 'adminVersionsList', 'version');
 }
 
-// عرض العناصر في لوحة الإدارة
+// عرض العناصر في لوحة الإدارة (تصميم جديد)
 function renderAdminItems(items, containerId, type) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
     if (items.length === 0) {
-        container.innerHTML = '<div class="no-results"><p>لا توجد عناصر</p></div>';
+        container.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-${type === 'mod' ? 'puzzle-piece' : 'download'}"></i>
+                <p>لا توجد ${type === 'mod' ? 'مودات' : 'إصدارات'} متاحة</p>
+                <small>استخدم زر "إضافة ${type === 'mod' ? 'مود جديد' : 'إصدار جديد'}" لإضافة أول عنصر</small>
+            </div>
+        `;
         return;
     }
     
     container.innerHTML = items.map(item => `
-        <div class="post-item" data-id="${item.id}" data-type="${type}">
-            <div class="post-header">
-                <h4 class="post-title">${item.title}</h4>
-                <span class="item-type ${type === 'mod' ? 'mod-type' : 'version-type'}">
+        <div class="admin-post-card" data-id="${item.id}" data-type="${type}">
+            <div class="admin-post-header">
+                <h4 class="admin-post-title">
+                    <i class="fas ${type === 'mod' ? 'fa-puzzle-piece' : 'fa-download'}"></i>
+                    ${item.title}
+                </h4>
+                <span class="admin-post-type ${type === 'mod' ? 'mod-type' : 'version-type'}">
                     ${type === 'mod' ? 'مود' : 'إصدار'}
                 </span>
             </div>
-            <p>${item.description.substring(0, 80)}...</p>
-            <div class="post-meta">
-                <small>${formatDate(item.created_at)}</small>
-                ${item.downloads ? `<small> | التحميلات: ${item.downloads}</small>` : ''}
-                ${item.version ? `<small> | الإصدار: ${item.version}</small>` : ''}
+            
+            <p class="admin-post-desc">${item.description.substring(0, 120)}${item.description.length > 120 ? '...' : ''}</p>
+            
+            <div class="admin-post-meta">
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>${formatDate(item.created_at)}</span>
+                </div>
+                
+                ${item.downloads ? `
+                <div class="meta-item">
+                    <i class="fas fa-download"></i>
+                    <span>${item.downloads} تحميل</span>
+                </div>
+                ` : ''}
+                
+                ${item.version ? `
+                <div class="meta-item">
+                    <i class="fas fa-code-branch"></i>
+                    <span>${item.version}</span>
+                </div>
+                ` : ''}
+                
+                ${item.category && type === 'mod' ? `
+                <div class="meta-item">
+                    <i class="fas fa-folder"></i>
+                    <span>${item.category}</span>
+                </div>
+                ` : ''}
             </div>
-            <div class="post-actions">
-                <button class="btn btn-primary btn-small btn-edit" data-id="${item.id}" data-type="${type}">
+            
+            <div class="admin-post-actions">
+                <button class="btn btn-primary btn-edit" data-id="${item.id}" data-type="${type}">
                     <i class="fas fa-edit"></i> تعديل
                 </button>
-                <button class="btn btn-danger btn-small btn-delete" data-id="${item.id}" data-type="${type}">
+                <button class="btn btn-danger btn-delete" data-id="${item.id}" data-type="${type}">
                     <i class="fas fa-trash"></i> حذف
                 </button>
             </div>
         </div>
     `).join('');
     
-    // إضافة مستمعي الأحداث
+    // إضافة مستمعي الأحداث للأزرار
     container.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = btn.getAttribute('data-id');
@@ -672,6 +729,14 @@ function filterAdminItems(e) {
     const type = containerId === 'adminModsList' ? 'mod' : 'version';
     const items = type === 'mod' ? window.appData.allItems.mods : window.appData.allItems.versions;
     
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    if (!searchTerm) {
+        renderAdminItems(items, containerId, type);
+        return;
+    }
+    
     const filteredItems = items.filter(item =>
         item.title.toLowerCase().includes(searchTerm) ||
         item.description.toLowerCase().includes(searchTerm) ||
@@ -679,32 +744,49 @@ function filterAdminItems(e) {
         (item.version && item.version.toLowerCase().includes(searchTerm))
     );
     
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
     if (filteredItems.length === 0) {
-        container.innerHTML = '<div class="no-results"><p>لا توجد نتائج</p></div>';
+        container.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-${type === 'mod' ? 'puzzle-piece' : 'download'}"></i>
+                <p>لا توجد نتائج للبحث "${searchTerm}"</p>
+            </div>
+        `;
         return;
     }
     
     container.innerHTML = filteredItems.map(item => `
-        <div class="post-item" data-id="${item.id}" data-type="${type}">
-            <div class="post-header">
-                <h4 class="post-title">${item.title}</h4>
-                <span class="item-type ${type === 'mod' ? 'mod-type' : 'version-type'}">
+        <div class="admin-post-card" data-id="${item.id}" data-type="${type}">
+            <div class="admin-post-header">
+                <h4 class="admin-post-title">
+                    <i class="fas ${type === 'mod' ? 'fa-puzzle-piece' : 'fa-download'}"></i>
+                    ${item.title}
+                </h4>
+                <span class="admin-post-type ${type === 'mod' ? 'mod-type' : 'version-type'}">
                     ${type === 'mod' ? 'مود' : 'إصدار'}
                 </span>
             </div>
-            <p>${item.description.substring(0, 80)}...</p>
-            <div class="post-meta">
-                <small>${formatDate(item.created_at)}</small>
-                ${item.downloads ? `<small> | التحميلات: ${item.downloads}</small>` : ''}
+            
+            <p class="admin-post-desc">${item.description.substring(0, 120)}${item.description.length > 120 ? '...' : ''}</p>
+            
+            <div class="admin-post-meta">
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>${formatDate(item.created_at)}</span>
+                </div>
+                
+                ${item.downloads ? `
+                <div class="meta-item">
+                    <i class="fas fa-download"></i>
+                    <span>${item.downloads} تحميل</span>
+                </div>
+                ` : ''}
             </div>
-            <div class="post-actions">
-                <button class="btn btn-primary btn-small btn-edit" data-id="${item.id}" data-type="${type}">
+            
+            <div class="admin-post-actions">
+                <button class="btn btn-primary btn-edit" data-id="${item.id}" data-type="${type}">
                     <i class="fas fa-edit"></i> تعديل
                 </button>
-                <button class="btn btn-danger btn-small btn-delete" data-id="${item.id}" data-type="${type}">
+                <button class="btn btn-danger btn-delete" data-id="${item.id}" data-type="${type}">
                     <i class="fas fa-trash"></i> حذف
                 </button>
             </div>
