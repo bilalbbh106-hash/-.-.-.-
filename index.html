@@ -26,9 +26,10 @@
         </div>
     </div>
 
-    <!-- الهيدر -->
+    <!-- الهيدر الجديد مع شريط أفقي -->
     <header>
         <div class="container">
+            <!-- العنوان الرئيسي -->
             <div class="logo-container">
                 <div class="logo">
                     <i class="fas fa-cube"></i>
@@ -36,12 +37,25 @@
                 <h1 class="logo-text">مكتبة المودات والبيدروك</h1>
             </div>
             
-            <nav>
-                <ul>
-                    <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> الرئيسية</a></li>
-                    <li><a href="#" class="nav-link" data-section="mods"><i class="fas fa-puzzle-piece"></i> المودات</a></li>
-                    <li><a href="#" class="nav-link" data-section="versions"><i class="fas fa-download"></i> الإصدارات</a></li>
-                    <li><a href="#" class="nav-link admin-btn" data-section="admin-login"><i class="fas fa-user-shield"></i> لوحة الإدارة</a></li>
+            <!-- شريط التنقل الأفقي -->
+            <nav class="horizontal-nav">
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active" data-section="home">
+                        <i class="fas fa-home"></i>
+                        <span>الرئيسية</span>
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-section="mods">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <span>المودات</span>
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-section="versions">
+                        <i class="fas fa-download"></i>
+                        <span>الإصدارات</span>
+                    </a></li>
+                    <li><a href="#" class="nav-link admin-btn" data-section="admin-login">
+                        <i class="fas fa-user-shield"></i>
+                        <span>لوحة الإدارة</span>
+                    </a></li>
                 </ul>
             </nav>
         </div>
@@ -328,7 +342,7 @@
                 <div class="admin-search">
                     <input type="text" id="adminSearchMods" class="form-control" placeholder="بحث في المودات...">
                 </div>
-                <div class="posts-list" id="adminModsList">
+                <div class="admin-posts-container" id="adminModsList">
                     <div class="loading-item">
                         <i class="fas fa-spinner fa-spin"></i> جاري تحميل المودات...
                     </div>
@@ -341,7 +355,7 @@
                 <div class="admin-search">
                     <input type="text" id="adminSearchVersions" class="form-control" placeholder="بحث في الإصدارات...">
                 </div>
-                <div class="posts-list" id="adminVersionsList">
+                <div class="admin-posts-container" id="adminVersionsList">
                     <div class="loading-item">
                         <i class="fas fa-spinner fa-spin"></i> جاري تحميل الإصدارات...
                     </div>
@@ -401,4 +415,4 @@
         </div>
     </div>
 </body>
-                </html>
+                            </html>
